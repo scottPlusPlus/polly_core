@@ -1,0 +1,12 @@
+-lib hawk
+-lib json2object
+-lib dataclass
+-lib utest
+-lib zenlog
+-lib compiletime
+-lib tink_core
+-debug
+-cp src
+-cp test
+-main test.MyTests
+-js bin/js/test.js 
