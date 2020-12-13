@@ -1,0 +1,24 @@
+{
+	"name": polly_core
+	"url": "https://github.com/scottPlusPlus/polly_core",
+	"license": "MIT",
+	"tags": [
+		"wip"
+	],
+	"description": "Polly: Create and vote on polls.",
+	"version": "0.0.1",
+	"releasenote": "tbd",
+	"contributors": [
+		"scottPlusPlus"
+	],
+	"classPath": "src",
+	"dependencies": {
+		"hawk": "",
+		"dataclass": "",
+		"utest": "",
+		"json2object": "",
+		"zenlog": "",
+		"compiletime": "",
+		"tink_core": "",
+	}
+}
