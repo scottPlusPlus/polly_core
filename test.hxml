@@ -8,5 +8,5 @@
 -debug
 -cp src
 -cp test
--main test.MyTests
+-main TestRunner
 -js bin/js/test.js 

@@ -1,5 +1,3 @@
-package test;
-
 import hawk.testutils.TestLogger;
 import zenlog.Log;
 import haxe.Json;
@@ -8,13 +6,13 @@ import utest.Assert;
 import utest.Async;
 import utest.Runner;
 
-class MyTests {
+class TestRunner {
 	public static function main() {
 		TestLogger.init();
 		TestLogger.filter.indentStackStart = 18;
 
 		var runner = new Runner();
-		runner.addCases(test.polly_core);
+		runner.addCases(polly_core_tests);
 
 		Report.create(runner);
 

@@ -1,4 +1,4 @@
-package test.polly_core.model;
+package polly_core_tests.model;
 
 import zenlog.Log;
 import haxe.Timer;
