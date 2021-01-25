@@ -9,21 +9,20 @@ using polly_core.model.PollX;
 class PollXTest extends utest.Test {
 	function testCreateVote() {
 		var poll = Poll.testExample();
-		var voter = UUID.gen();
+		trace('default poll example: ' + poll.toJson());
 
         //sanity test we didn't change the test data
 		Assert.equals(3, poll.options.length);
 
-		var createVote = poll.createVote(voter, [0, 2, 1]);
+		var createVote = poll.createVote([0, 2, 1]);
 		Assert.isTrue(createVote.isSuccess());
 
 		var vote = createVote.sure();
 		Assert.equals(poll.id, vote.poll);
-		Assert.equals(voter, vote.voter);
 		Assert.equals(3, vote.data.length);
-		Assert.equals(0, vote.data[0].rank);
-		Assert.equals(2, vote.data[1].rank);
-		Assert.equals(1, vote.data[2].rank);
+		Assert.equals(0, vote.data[0].value);
+		Assert.equals(2, vote.data[1].value);
+		Assert.equals(1, vote.data[2].value);
 	}
 
 }

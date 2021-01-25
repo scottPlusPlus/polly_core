@@ -4,25 +4,23 @@ import hawk.core.UUID;
 
 class Vote implements DataClass  {
     public final poll:PollID;
-    public final voter:UUID;
-    public final data:Array<OptionRank>;
+    public final data:Array<OptionValue>;
 
     public static function testExample():Vote {
-        var rank0 = new OptionRank({
+        var rank0 = new OptionValue({
             optionID: 0,
-            rank:1
+            value:1
         });
-        var rank1 = new OptionRank({
+        var rank1 = new OptionValue({
             optionID: 1,
-            rank:2
+            value:2
         });
-        var rank2 = new OptionRank({
+        var rank2 = new OptionValue({
             optionID: 2,
-            rank:0
+            value:0
         });
         return new Vote({
             poll:PollID.gen(),
-            voter:UUID.gen(),
             data:[rank0, rank1, rank2]
         });
     }
@@ -32,13 +30,19 @@ class Vote implements DataClass  {
         return parser.fromJson(str);
     }
 
-    public function toJson():String {
+    public static function toJson(v:Vote):String {
         var writer = new json2object.JsonWriter<Vote>();
-        return writer.write(this);
+        return writer.write(v);
+    }
+
+    public function hash():String {
+        var j = Vote.toJson(this);
+        var hash = haxe.crypto.Md5.encode(j);
+        return hash;
     }
 }
 
-class OptionRank implements DataClass {
+class OptionValue implements DataClass {
     public final optionID: UInt;
-    public final rank:Int;
+    public final value:Int;
 }
