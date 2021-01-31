@@ -15,25 +15,30 @@ class StarVoting {
         return Success(vote);
     }
 
-    public static function tally(poll:Poll, votes:Array<VoteType>): Int {
+    public static function tally(poll:Poll, votes:Array<VoteType>): StarVotingResults {
         //TODO - ties??
-        
+        var res = new StarVotingResults();
+
+        var optionToIndex = new Map<UInt,UInt>();
+
+        for (i in 0...poll.options.length){
+            res.scores.push(0);
+            optionToIndex.set(i, poll.options[i].id);
+        }
+
         //first find top 2...
-        var scores= new Map<UInt,Int>();
         for (vt in votes){
             for (opt in vt.vote.data){
-                var val = scores.get(opt.optionID);
-                if (val == null){
-                    val = 0;
-                }
+                var index = optionToIndex.get(opt.optionID);
+                var val = res.scores[index];
                 val += opt.value * vt.count;
-                scores.set(opt.optionID, val);
+                res.scores[index] = val;
             }
         }
 
         var first = {key:  0, value: 0};
         var second = {key: 0, value: 0};
-        for (item in scores.keyValueIterator()){
+        for (item in  res.scores.keyValueIterator()) {
             if(item.value > second.value){
                 second.key = item.key;
                 second.value = item.value;
@@ -66,10 +71,11 @@ class StarVoting {
         }
 
         if (firstHighers > secondHighers){
-            return first.key;
+            res.winnerIndex = first.key;
         } else {
-            return second.key;
+            res.winnerIndex = second.key;
         }
+        return res;
     }
 
 

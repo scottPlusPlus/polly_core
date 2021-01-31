@@ -14,8 +14,8 @@ class StarVotingTest  extends utest.Test {
         var poll = Poll.testExample();
         var vt1 = createType(poll, [0,1,2], 10);
         var vt2 = createType(poll, [0,2,1], 20);
-        var winner = StarVoting.tally(poll, [vt1, vt2]);
-        Assert.equals(1, winner);
+        var res = StarVoting.tally(poll, [vt1, vt2]);
+        Assert.equals(1, res.winnerIndex);
     }
 
     function testCase2() {
@@ -23,8 +23,8 @@ class StarVotingTest  extends utest.Test {
         var vt1 = createType(poll, [0,1,2,3], 10);
         var vt2 = createType(poll, [3,2,1,0], 10);
         var vt3 = createType(poll, [2,3,1,0], 10);
-        var winner = StarVoting.tally(poll, [vt1, vt2, vt3]);
-        Assert.equals(1, winner);
+        var res = StarVoting.tally(poll, [vt1, vt2, vt3]);
+        Assert.equals(1, res.winnerIndex);
     }
 
     function testCase3() {
@@ -32,8 +32,8 @@ class StarVotingTest  extends utest.Test {
         var vt1 = createType(poll, [0,1,2,3], 10);
         var vt2 = createType(poll, [3,2,1,0], 10);
         var vt3 = createType(poll, [2,3,1,0], 10);
-        var winner = StarVoting.tally(poll, [vt1, vt2, vt3]);
-        Assert.equals(1, winner);
+        var res = StarVoting.tally(poll, [vt1, vt2, vt3]);
+        Assert.equals(1, res.winnerIndex);
     } 
 
 
