@@ -1,5 +1,6 @@
 package polly_core.model;
 
+import hawk.datatypes.Timestamp;
 import polly_core.model.PollID;
 import hawk.core.UUID;
 
@@ -13,6 +14,8 @@ class Poll implements DataClass {
     public final description:String;
     public final state:PollState;
     public final options:Array<Option>;
+    public final opens:Timestamp;
+    public final closes:Timestamp;
 
     // public static function initVotes(p:Poll):Poll {
     //     var emptyArr = new Array<UInt>();
@@ -48,12 +51,15 @@ class Poll implements DataClass {
             opts.push(opt);
         }
         
+        var closes = Timestamp.now() + Timestamp.HOUR * 24;
         var p = new Poll({
             id: PollID.gen(),
             owner: UUID.gen(),
             description: "test poll",
             state: PollState.Draft,
-            options: opts
+            options: opts,
+            opens: Timestamp.fromUInt(0),
+            closes:closes
         });
         return p;
     }

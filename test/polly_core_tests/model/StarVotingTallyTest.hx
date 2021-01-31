@@ -75,6 +75,15 @@ class StarVotingTallyTest extends utest.Test {
         Assert.same(3, tally.winner());
     }
 
+    function testRemoves() {
+        var poll = Poll.testExample(5);
+        var vt1 =  poll.createVote([0,1,2,3,4]).sure();
+        var tally = new StarVotingTally(poll).addVote(vt1, 11);
+        tally.addVote(vt1, -1);
+        Assert.same([0,10,20,30,40], tally.scores);
+        Assert.same(4, tally.winner());
+    }
+
     function testJson(){
         var poll = Poll.testExample(5);
         var vt1 =  poll.createVote([0,1,2,4,3]).sure();
