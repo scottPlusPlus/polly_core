@@ -74,4 +74,15 @@ class StarVotingTallyTest extends utest.Test {
         Assert.same([0,2,4,8,7], tally.scores);
         Assert.same(3, tally.winner());
     }
+
+    function testJson(){
+        var poll = Poll.testExample(5);
+        var vt1 =  poll.createVote([0,1,2,4,3]).sure();
+        var tally = new StarVotingTally(poll).addVote(vt1, 10);
+        var str = StarVotingTally.toJson(tally);
+        
+        var tallyBack = StarVotingTally.fromJson(str);
+        Assert.same([0,10,20,40,30], tallyBack.scores);
+        Assert.same(3, tallyBack.winner());
+    }
 }

@@ -60,12 +60,9 @@ class StarVotingTally {
 
 	public function winner():UInt {
 		//Log.debug("get winner");
-		var res = new StarVotingResults();
-		res.scores = scores.copy();
-
 		var first = {key: 0, value: 0};
 		var second = {key: 0, value: 0};
-		for (item in res.scores.keyValueIterator()) {
+		for (item in scores.keyValueIterator()) {
 			if (item.value > second.value) {
 				second.key = item.key;
 				second.value = item.value;
@@ -154,6 +151,16 @@ class StarVotingTally {
 		}
 		return res;
 	}
+
+    public static function fromJson(str:String): StarVotingTally {
+        var parser = new json2object.JsonParser<StarVotingTally>();
+        return parser.fromJson(str);
+    }
+
+    public static function toJson(obj:StarVotingTally):String {
+        var writer = new json2object.JsonWriter<StarVotingTally>();
+        return writer.write(obj);
+    }
 }
 
 typedef Runoff = {
