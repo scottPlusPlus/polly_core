@@ -2,7 +2,7 @@ package polly_core.model;
 
 import hawk.datatypes.Timestamp;
 import polly_core.model.PollID;
-import hawk.core.UUID;
+import hawk.datatypes.UUID;
 
 //we need to track which users have voted on a poll
 //but only to prevent those same users from voting again

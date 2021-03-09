@@ -1,6 +1,6 @@
 package polly_core.model;
 
-import hawk.core.UUID;
+import hawk.datatypes.UUID;
 
 class Vote implements DataClass  {
     public final poll:PollID;

@@ -4,7 +4,7 @@ import tink.core.Error;
 import tink.core.Outcome;
 import polly_core.model.Poll;
 import polly_core.model.Vote;
-import hawk.core.UUID;
+import hawk.datatypes.UUID;
 
 class PollX {
 

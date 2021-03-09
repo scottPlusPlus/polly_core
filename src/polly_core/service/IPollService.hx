@@ -5,7 +5,7 @@ import polly_core.model.StarVotingTally;
 import polly_core.model.Vote;
 import tink.CoreApi;
 import polly_core.model.Poll;
-import hawk.core.UUID;
+import hawk.datatypes.UUID;
 
 interface IPollService {
 

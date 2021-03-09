@@ -1,7 +1,7 @@
 package polly_core_tests.model;
 
 import utest.Assert;
-import hawk.core.UUID;
+import hawk.datatypes.UUID;
 import polly_core.model.Poll;
 
 using polly_core.model.PollX;
