@@ -3,6 +3,11 @@ package polly_core.model;
 import zenlog.Log;
 
 class StarVotingTally {
+
+	public var scores:Array<Int> = [];
+	public var runoffs:Array<Int> = [];
+
+
 	public function new(poll:Poll) {
 		for (_ in 0...poll.options.length) {
 			scores.push(0);
@@ -15,8 +20,6 @@ class StarVotingTally {
 		//Log.debug(this);
 	}
 
-	public var scores:Array<Int> = [];
-	public var runoffs:Array<Int> = [];
 
 	public function add(other:StarVotingTally):StarVotingTally {
 		for (i in 0...other.scores.length) {
