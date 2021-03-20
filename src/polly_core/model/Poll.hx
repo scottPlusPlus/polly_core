@@ -11,6 +11,7 @@ import hawk.datatypes.UUID;
 class Poll implements DataClass {
     public final id:PollID;
     public final owner:UUID;
+    public final name:String;
     public final description:String;
     public final state:PollState;
     public final options:Array<Option>;
@@ -55,7 +56,8 @@ class Poll implements DataClass {
         var p = new Poll({
             id: PollID.gen(),
             owner: UUID.gen(),
-            description: "test poll",
+            name: "TestPoll",
+            description: "A test poll",
             state: PollState.Draft,
             options: opts,
             opens: Timestamp.fromUInt(0),
