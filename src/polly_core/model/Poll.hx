@@ -1,5 +1,6 @@
 package polly_core.model;
 
+import hawk.general_tools.adapters.Adapter;
 import hawk.datatypes.Timestamp;
 import polly_core.model.PollID;
 import hawk.datatypes.UUID;
@@ -40,6 +41,12 @@ class Poll implements DataClass {
     public function toJson():String {
         var writer = new json2object.JsonWriter<Poll>();
         return writer.write(this);
+    }
+
+    public static function stringAdapter():Adapter<Poll,String>{
+        return new Adapter(function(p:Poll):String{
+            return p.toJson();
+        }, fromJson);
     }
 
     public static function testExample(options:UInt = 3):Poll {
