@@ -1,35 +1,34 @@
-import hawk.testutils.TestLogger;
-import zenlog.Log;
-import haxe.Json;
+import hawk.testutils.TestLog;
 import utest.ui.Report;
-import utest.Assert;
-import utest.Async;
 import utest.Runner;
 
 class TestRunner {
 	public static function main() {
-		TestLogger.init();
-		TestLogger.filter.indentStackStart = 18;
+		TestLog.init();
 
 		var runner = new Runner();
 		runner.addCases(polly_core_tests);
+		runner.onTestStart.add(function(x) {
+			TestLog.startTest(x.fixture.method);
+		});
+		runner.onTestComplete.add(function(x) {
+			for (assert in x.results) {
+				switch (assert) {
+					case Failure(msg, pos):
+						TestLog.debugForTest();
+						break;
+					case Error(e, stack):
+						TestLog.debugForTest();
+						break;
+					default:
+				}
+			}
+			TestLog.finishTest();
+		});
+
 
 		Report.create(runner);
-
-		ageWarning();
-
+		TestLog.ageWarning();
 		runner.run();
-	}
-
-	static function ageWarning():Void {
-		var buildTime = CompileTime.buildDate();
-		var now = Date.now();
-		var dur = now.getTime() - buildTime.getTime();
-		var seconds = Math.floor(dur / 1000);
-
-		var minutes = seconds / 60;
-		if (minutes > 1) {
-			Log.warn('WARN! \n\nBuild is  ${minutes} minutes old\n\n WARN');
-		}
 	}
 }

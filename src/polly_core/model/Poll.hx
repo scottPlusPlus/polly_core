@@ -1,5 +1,9 @@
 package polly_core.model;
 
+import hawk.datatypes.validator.Validator;
+import tink.core.Error;
+import tink.CoreApi.Outcome;
+import hawk.datatypes.validator.StringValidator;
 import hawk.general_tools.adapters.Adapter;
 import hawk.datatypes.Timestamp;
 import polly_core.model.PollID;
@@ -19,19 +23,20 @@ class Poll implements DataClass {
     public final opens:Timestamp;
     public final closes:Timestamp;
 
-    // public static function initVotes(p:Poll):Poll {
-    //     var emptyArr = new Array<UInt>();
-    //     for (_ in 0...p.options.length){
-    //         emptyArr.push(0);
-    //     }
-    //     var newOptions = new Array<Option>();
-    //     for (opt in p.options){
-    //         var newOpt = Option.copy(opt, {votes: emptyArr.copy()});
-    //         newOptions.push(newOpt);
-    //     }
-    //     p = Poll.copy(p, {options:newOptions});
-    //     return p;
-    // }
+
+    public static function baseDraft():Poll {
+        var now = Timestamp.now();
+        return new Poll({
+            id: UUID.gen(),
+            owner: "",
+            name: "",
+            description: "",
+            state: PollState.Draft,
+            options: [],
+            opens: now,
+            closes :Timestamp.DAY * 3 + now
+        });
+    }
 
     public static function fromJson(str:String): Poll {
         var parser = new json2object.JsonParser<Poll>();
@@ -73,9 +78,74 @@ class Poll implements DataClass {
         return p;
     }
 
+
+    public static function validator(): PollValidator {
+        return new PollValidator();
+    }
+
+	public static function validOrErr(poll:Poll):Outcome<Poll, Error> {
+		var errs = validator().errors(poll);
+		if (errs.length > 0) {
+			return Failure(new Error('Invalid Email: ${errs.join(', ')}'));
+		}
+		return Success(poll);
+	}
+
 }
 
 class Option implements DataClass {
     public final id:UInt;
     public final info:String;
+}
+
+class PollValidator extends Validator<Poll> {
+
+    public function new(){
+        super();
+        nameValidator = new StringValidator("Name").nonNull().minChar(3).maxChar(128).trim();
+        descriptionValidator = new StringValidator("Description").nonNull().minChar(3).maxChar(512);
+        ownerValidator = new StringValidator('Owner').nonNull().minChar(8).maxChar(32);
+
+        addSubValidator(function(p){
+            return p.name;
+        }, nameValidator);
+
+        addSubValidator(function(p){
+            return p.description;
+        }, descriptionValidator);
+
+        addSubValidator(function(p){
+            return p.owner.toString();
+        }, ownerValidator);
+        
+        addRule(function(p){
+            if (p.state == PollState.Draft){
+                return Pass;
+            }
+            var v = nonDraftValidator();
+            var errs = v.errors(p);
+            return Validator.outcomeFromArray(errs);
+        });  
+    }
+
+    public final nameValidator:StringValidator;
+    public final descriptionValidator: StringValidator;
+    public final ownerValidator: StringValidator;
+
+    private static function nonDraftValidator():Validator<Poll> {
+        var validator = new Validator<Poll>();
+        validator.addRule(function(p){
+            if (p.opens.toInt() >= p.closes.toInt()){
+                return Fail(['Invalid Poll Closing Time']);
+            }
+            return Pass;
+        });
+        validator.addRule(function(p){
+            if (p.options.length < 2){
+                return Fail(['Poll must have at least 2 options']);
+            }
+            return Pass;
+        });
+        return validator;
+    }
 }
