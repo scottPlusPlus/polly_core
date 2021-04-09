@@ -1,5 +1,6 @@
 package polly_core.model;
 
+import hawk.datatypes.validator.ValidationOutcome;
 import hawk.datatypes.validator.Validator;
 import tink.core.Error;
 import tink.CoreApi.Outcome;
@@ -8,6 +9,8 @@ import hawk.general_tools.adapters.Adapter;
 import hawk.datatypes.Timestamp;
 import polly_core.model.PollID;
 import hawk.datatypes.UUID;
+
+using hawk.util.OutcomeX;
 
 //we need to track which users have voted on a poll
 //but only to prevent those same users from voting again
@@ -105,6 +108,7 @@ class PollValidator extends Validator<Poll> {
         nameValidator = new StringValidator("Name").nonNull().minChar(3).maxChar(128).trim();
         descriptionValidator = new StringValidator("Description").nonNull().minChar(3).maxChar(512);
         ownerValidator = new StringValidator('Owner').nonNull().minChar(8).maxChar(32);
+        opensValidator = new StringValidator('Opens').nonNull().addRule(validTimestamp);
 
         addSubValidator(function(p){
             return p.name;
@@ -131,6 +135,7 @@ class PollValidator extends Validator<Poll> {
     public final nameValidator:StringValidator;
     public final descriptionValidator: StringValidator;
     public final ownerValidator: StringValidator;
+    public final opensValidator: StringValidator;
 
     private static function nonDraftValidator():Validator<Poll> {
         var validator = new Validator<Poll>();
@@ -147,5 +152,13 @@ class PollValidator extends Validator<Poll> {
             return Pass;
         });
         return validator;
+    }
+
+    private static function validTimestamp(str:String):ValidationOutcome {
+        var attempt = Timestamp.fromFormString(str);
+        if (attempt.isSuccess()){
+            return Pass;
+        }
+        return Fail(['Invalid date-time. Expecting something like "2020-04-08 12:34:56"']);
     }
 }
